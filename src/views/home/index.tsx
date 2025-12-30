@@ -89,7 +89,7 @@ const GameSandbox: FC = () => {
     speedRamp: number;
     missPenalty: number;
   }> = {
-    easy: { duration: 45, spawnRate: 1200, target: 300, label: 'EASY', fallSpeed: 1.2, speedRamp: 0.01, missPenalty: 0.08 },
+    easy: { duration: 45, spawnRate: 1200, target: 300, label: 'EASY', fallSpeed: 0.8, speedRamp: 0.008, missPenalty: 0.06 },
     medium: { duration: 35, spawnRate: 800, target: 500, label: 'MEDIUM', fallSpeed: 1.8, speedRamp: 0.015, missPenalty: 0.12 },
     hard: { duration: 30, spawnRate: 500, target: 800, label: 'HARD', fallSpeed: 2.4, speedRamp: 0.02, missPenalty: 0.16 },
   };
@@ -703,7 +703,7 @@ const GameSandbox: FC = () => {
         }
         @keyframes comboFlash {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.15); }
+          50% { transform: scale(1.08); }
         }
         @keyframes specialPulse {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -871,7 +871,7 @@ const GameSandbox: FC = () => {
           </div>
           <div className="flex items-center justify-between gap-2 mb-2">
             {combo > 0 && (
-              <div className={`bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg px-3 py-1.5 shadow-sm border border-orange-300/50 ${comboFlash ? 'scale-110' : ''} transition-transform duration-200`}>
+              <div className={`bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg px-3 py-1.5 shadow-sm border border-orange-300/50 ${comboFlash ? 'scale-105' : ''} transition-transform duration-200`}>
                 <div className="text-[8px] sm:text-[9px] text-orange-700 font-bold uppercase">COMBO</div>
                 <div className="text-base sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-yellow-600 leading-tight">
                   {combo} × {comboMultiplier}
@@ -879,7 +879,7 @@ const GameSandbox: FC = () => {
               </div>
             )}
             {powerUpActive.type && (
-              <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg px-3 py-1.5 shadow-sm border border-purple-300/50 animate-pulse">
+              <div className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-lg px-3 py-1.5 shadow-sm border border-purple-300/50">
                 <div className="text-[8px] sm:text-[9px] text-purple-700 font-bold uppercase">
                   {powerUpActive.type === 'slow' ? '⏱️ SLOW-MO' : '⚡ DOUBLE'}
                 </div>
@@ -893,7 +893,7 @@ const GameSandbox: FC = () => {
           <div className="h-2 sm:h-2.5 bg-white/70 rounded-full overflow-hidden border border-purple-300/60 shadow-inner">
             <div
               className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300 rounded-full"
-              style={{ width: `${Math.min((score / WIN_SCORE) * 100, 100)}%`, boxShadow: '0 2px 8px rgba(168,85,247,0.4)' }}
+              style={{ width: `${Math.min((score / WIN_SCORE) * 100, 100)}%` }}
             />
           </div>
         </div>
