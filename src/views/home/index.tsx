@@ -89,7 +89,7 @@ const GameSandbox: FC = () => {
     speedRamp: number;
     missPenalty: number;
   }> = {
-    easy: { duration: 45, spawnRate: 1200, target: 300, label: 'EASY', fallSpeed: 0.8, speedRamp: 0.008, missPenalty: 0.06 },
+    easy: { duration: 45, spawnRate: 1200, target: 300, label: 'EASY', fallSpeed: 0.5, speedRamp: 0.005, missPenalty: 0.04 },
     medium: { duration: 35, spawnRate: 800, target: 500, label: 'MEDIUM', fallSpeed: 1.8, speedRamp: 0.015, missPenalty: 0.12 },
     hard: { duration: 30, spawnRate: 500, target: 800, label: 'HARD', fallSpeed: 2.4, speedRamp: 0.02, missPenalty: 0.16 },
   };
@@ -687,7 +687,7 @@ const GameSandbox: FC = () => {
       <style>{`
         @keyframes float {
           0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
-          50% { transform: translate(-50%, -50%) translateY(-8px) rotate(3deg); }
+          50% { transform: translate(-50%, -50%) translateY(-4px) rotate(2deg); }
         }
         @keyframes sparkle {
           0% { opacity: 0.4; transform: scale(0.6) translateY(0); }
@@ -703,7 +703,7 @@ const GameSandbox: FC = () => {
         }
         @keyframes comboFlash {
           0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.08); }
+          50% { transform: scale(1.03); }
         }
         @keyframes specialPulse {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -871,7 +871,7 @@ const GameSandbox: FC = () => {
           </div>
           <div className="flex items-center justify-between gap-2 mb-2">
             {combo > 0 && (
-              <div className={`bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg px-3 py-1.5 shadow-sm border border-orange-300/50 ${comboFlash ? 'scale-105' : ''} transition-transform duration-200`}>
+              <div className={`bg-gradient-to-br from-orange-100 to-yellow-100 rounded-lg px-3 py-1.5 shadow-sm border border-orange-300/50 ${comboFlash ? 'scale-[1.02]' : ''} transition-transform duration-200`}>
                 <div className="text-[8px] sm:text-[9px] text-orange-700 font-bold uppercase">COMBO</div>
                 <div className="text-base sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-yellow-600 leading-tight">
                   {combo} × {comboMultiplier}
@@ -912,10 +912,10 @@ const GameSandbox: FC = () => {
               return '';
             };
             const getSpecialShadow = () => {
-              if (bubble.type === 'golden') return `0 0 30px rgba(251,191,36,0.8), 0 8px 25px rgba(0,0,0,0.4)`;
-              if (bubble.type === 'bomb') return `0 0 25px rgba(239,68,68,0.7), 0 8px 25px rgba(0,0,0,0.5)`;
-              if (bubble.type === 'slow') return `0 0 25px rgba(59,130,246,0.7), 0 8px 25px rgba(0,0,0,0.3)`;
-              if (bubble.type === 'double') return `0 0 25px rgba(139,92,246,0.7), 0 8px 25px rgba(0,0,0,0.3)`;
+              if (bubble.type === 'golden') return `0 0 15px rgba(251,191,36,0.5), 0 6px 18px rgba(0,0,0,0.3)`;
+              if (bubble.type === 'bomb') return `0 0 15px rgba(239,68,68,0.5), 0 6px 18px rgba(0,0,0,0.4)`;
+              if (bubble.type === 'slow') return `0 0 15px rgba(59,130,246,0.5), 0 6px 18px rgba(0,0,0,0.25)`;
+              if (bubble.type === 'double') return `0 0 15px rgba(139,92,246,0.5), 0 6px 18px rgba(0,0,0,0.25)`;
               return `0 6px 20px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)`;
             };
             
