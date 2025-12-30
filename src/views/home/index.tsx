@@ -6,10 +6,10 @@ import pkg from '../../../package.json';
 
 export const HomeView: FC = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white">
+    <div className="flex h-screen w-screen flex-col bg-black text-white overflow-hidden">
       {/* HEADER – fake Scrolly feed tabs */}
-      <header className="flex items-center justify-center border-b border-white/10 py-3">
-        <div className="flex items-center gap-2 rounded-full bg-white/5 px-2 py-1 text-[11px]">
+      <header className="flex items-center justify-center border-b border-white/10 py-2 sm:py-3 flex-shrink-0">
+        <div className="flex items-center gap-2 rounded-full bg-white/5 px-2 py-1 text-[10px] sm:text-[11px]">
           <button className="rounded-full bg-slate-900 px-3 py-1 font-semibold text-white">
             Feed
           </button>
@@ -23,25 +23,25 @@ export const HomeView: FC = () => {
       </header>
 
       {/* MAIN – central game area (phone frame) */}
-      <main className="flex flex-1 items-center justify-center px-4 py-3">
-        <div className="relative aspect-[9/16] w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 shadow-[0_0_40px_rgba(56,189,248,0.35)]">
-          {/* Fake “feed card” top bar inside the phone */}
-          <div className="flex items-center justify-between px-3 py-2 text-[10px] text-slate-400">
-            <span className="rounded-full bg-white/5 px-2 py-1 text-[9px] uppercase tracking-wide">
+      <main className="flex flex-1 items-center justify-center px-2 sm:px-4 py-2 sm:py-3 min-h-0 overflow-hidden">
+        <div className="relative w-full h-full max-w-sm mx-auto overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 shadow-[0_0_40px_rgba(56,189,248,0.35)]">
+          {/* Fake "feed card" top bar inside the phone */}
+          <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 text-[9px] sm:text-[10px] text-slate-400 flex-shrink-0">
+            <span className="rounded-full bg-white/5 px-2 py-0.5 sm:py-1 text-[8px] sm:text-[9px] uppercase tracking-wide">
               Scrolly Game
             </span>
-            <span className="text-[9px] opacity-70">#NoCodeJam</span>
+            <span className="text-[8px] sm:text-[9px] opacity-70">#NoCodeJam</span>
           </div>
 
           {/* The game lives INSIDE this phone frame */}
-          <div className="flex h-[calc(100%-26px)] flex-col items-center justify-start px-3 pb-3 pt-1">
+          <div className="flex h-[calc(100%-32px)] sm:h-[calc(100%-26px)] flex-col items-center justify-start px-2 sm:px-3 pb-2 sm:pb-3 pt-0.5 sm:pt-1 overflow-hidden">
             <GameSandbox />
           </div>
         </div>
       </main>
 
       {/* FOOTER – tiny version text */}
-      <footer className="flex h-5 items-center justify-center border-t border-white/10 px-2 text-[9px] text-slate-500">
+      <footer className="flex h-4 sm:h-5 items-center justify-center border-t border-white/10 px-2 text-[8px] sm:text-[9px] text-slate-500 flex-shrink-0">
         <span>Scrolly · v{pkg.version}</span>
       </footer>
     </div>
@@ -69,18 +69,13 @@ const GameSandbox: FC = () => {
   };
 
   const colors = [
-    { name: 'red', from: '#ef4444', to: '#dc2626', points: 10 },
-    { name: 'orange', from: '#f97316', to: '#ea580c', points: 15 },
-    { name: 'yellow', from: '#eab308', to: '#ca8a04', points: 20 },
-    { name: 'lime', from: '#84cc16', to: '#65a30d', points: 22 },
-    { name: 'green', from: '#22c55e', to: '#16a34a', points: 25 },
-    { name: 'cyan', from: '#06b6d4', to: '#0891b2', points: 28 },
-    { name: 'blue', from: '#3b82f6', to: '#2563eb', points: 30 },
-    { name: 'indigo', from: '#6366f1', to: '#4f46e5', points: 32 },
-    { name: 'purple', from: '#a855f7', to: '#9333ea', points: 35 },
-    { name: 'fuchsia', from: '#d946ef', to: '#c026d3', points: 37 },
-    { name: 'pink', from: '#ec4899', to: '#db2777', points: 40 },
-    { name: 'rose', from: '#f43f5e', to: '#e11d48', points: 12 },
+    { name: 'red', from: '#f87171', to: '#dc2626', points: 10 },
+    { name: 'orange', from: '#fb923c', to: '#ea580c', points: 15 },
+    { name: 'yellow', from: '#facc15', to: '#ca8a04', points: 20 },
+    { name: 'green', from: '#4ade80', to: '#16a34a', points: 25 },
+    { name: 'blue', from: '#60a5fa', to: '#2563eb', points: 30 },
+    { name: 'purple', from: '#a78bfa', to: '#7c3aed', points: 35 },
+    { name: 'pink', from: '#f472b6', to: '#db2777', points: 40 },
   ];
 
   useEffect(() => {
@@ -189,18 +184,23 @@ const GameSandbox: FC = () => {
   const WIN_SCORE = difficulty ? difficultySettings[difficulty].target : 0;
 
   return (
-    <div className="h-full w-full flex flex-col overflow-hidden bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300 relative">
+    <div className="h-full w-full flex flex-col overflow-hidden bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200 relative">
       <style>{`
         @keyframes float {
-          0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
-          50% { transform: translate(-50%, -50%) translateY(-10px) rotate(5deg); }
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        @keyframes bounce {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
         }
         @keyframes sparkle {
-          0% { opacity: 0.2; transform: scale(0.5); }
-          100% { opacity: 0; transform: scale(1.2) translateY(20px); }
+          0%, 100% { opacity: 0.3; transform: scale(0.8); }
+          50% { opacity: 1; transform: scale(1.2); }
         }
-        .bubble {
-          animation: float 3.5s ease-in-out infinite;
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.6); }
+          50% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.8); }
         }
       `}</style>
 
@@ -212,95 +212,71 @@ const GameSandbox: FC = () => {
             left: `${p.x}%`,
             top: `${p.y}%`,
             background: p.color,
+            transform: `translate(${p.vx * 10}px, ${p.vy * 10}px)`,
+            opacity: 0.9,
             animation: 'sparkle 0.8s ease-out forwards',
-            boxShadow: `0 0 10px ${p.color}`,
+            boxShadow: `0 0 8px ${p.color}`,
           }}
         />
       ))}
 
       {!gameStarted && !difficulty && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-between bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300 px-4 py-4">
-          {/* Top Section - Title & Bubbles */}
-          <div className="flex flex-col items-center gap-2">
-            {/* Bubble Icon */}
-            <div className="text-5xl">🫧</div>
-            
-            {/* Title */}
-            <h1 className="text-3xl font-black text-white text-center leading-tight" style={{textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>
-              BUBBLE POP
-            </h1>
-            
-            {/* Divider */}
-            <div className="h-0.5 w-16 bg-white/60 rounded-full"></div>
-            
-            {/* Description */}
-            <p className="text-xs text-white/95 text-center font-semibold">
-              Pop bubbles to reach your target score!
-            </p>
-
-            {/* Select Play Statement */}
-            <p className="text-sm font-black text-white/90 mt-1">
-              SELECT PLAY
-            </p>
-          </div>
-
-          {/* Middle Section - Buttons in Row */}
-          <div className="flex gap-2 justify-center w-full px-2">
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-gradient-to-b from-blue-300/95 via-purple-300/95 to-pink-300/95 p-8">
+          <div className="text-9xl mb-6 animate-bounce drop-shadow-lg">🫧</div>
+          <h1 className="text-5xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-purple-700 to-pink-700 drop-shadow-lg text-center">
+            Bubble Pop!
+          </h1>
+          <p className="text-lg text-gray-800 mb-10 text-center font-bold px-4">
+            Pop bubbles to reach your target score!
+          </p>
+          
+          <div className="flex flex-col gap-5 w-full px-6 max-w-sm">
             <button
               onClick={() => handleDifficultySelect('easy')}
-              className="flex-1 px-2 py-2 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
+              className="w-full px-8 py-5 bg-gradient-to-br from-green-300 via-green-400 to-green-600 text-white font-black rounded-2xl text-2xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all border-2 border-green-200 hover:from-green-400 hover:to-green-700 transform hover:scale-105"
             >
-              <div className="text-lg">🟢</div>
-              <div className="font-black text-xs">EASY</div>
-              <div className="text-[8px] text-white/80">45s</div>
+              🟢 EASY
             </button>
-
             <button
               onClick={() => handleDifficultySelect('medium')}
-              className="flex-1 px-2 py-2 bg-gradient-to-br from-amber-400 to-orange-600 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
+              className="w-full px-8 py-5 bg-gradient-to-br from-yellow-300 via-orange-400 to-orange-600 text-white font-black rounded-2xl text-2xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all border-2 border-yellow-200 hover:from-yellow-400 hover:to-orange-700 transform hover:scale-105"
             >
-              <div className="text-lg">🟡</div>
-              <div className="font-black text-xs">MEDIUM</div>
-              <div className="text-[8px] text-white/80">35s</div>
+              🟡 MEDIUM
             </button>
-
             <button
               onClick={() => handleDifficultySelect('hard')}
-              className="flex-1 px-2 py-2 bg-gradient-to-br from-red-500 to-red-700 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
+              className="w-full px-8 py-5 bg-gradient-to-br from-red-400 via-red-500 to-red-700 text-white font-black rounded-2xl text-2xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all border-2 border-red-200 hover:from-red-500 hover:to-red-800 transform hover:scale-105"
             >
-              <div className="text-lg">🔴</div>
-              <div className="font-black text-xs">HARD</div>
-              <div className="text-[8px] text-white/80">30s</div>
+              🔴 HARD
             </button>
           </div>
-
-          {/* Bottom spacer */}
-          <div></div>
         </div>
       )}
 
       {gameStarted && difficulty && !gameOver && !gameWon && (
-        <div className="flex-shrink-0 px-2 py-2 bg-white/85 backdrop-blur-sm border-b-2 border-purple-300 shadow-md">
-          <div className="flex items-center justify-between gap-1.5 mb-1">
-            <div className="bg-blue-50 rounded-lg px-2 py-1 shadow-sm flex-1">
-              <div className="text-[7px] text-blue-800 font-bold uppercase">💎 Score</div>
-              <div className="text-lg font-black text-blue-700 leading-tight">{score}</div>
+        <div className="flex-shrink-0 px-5 py-4 bg-gradient-to-r from-white/90 via-purple-50/90 to-white/90 backdrop-blur-sm border-b-4 border-purple-400 shadow-lg">
+          <div className="flex items-center justify-between gap-4 mb-3">
+            <div className="bg-white/80 rounded-xl p-3 shadow-md flex-1">
+              <div className="text-xs text-purple-600 font-black mb-1 uppercase tracking-wide">SCORE</div>
+              <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                {score}
+              </div>
             </div>
-            <div className="bg-purple-50 rounded-lg px-2 py-1 shadow-sm flex-1 text-center">
-              <div className="text-[7px] text-purple-800 font-bold uppercase">🎯 Target</div>
-              <div className="text-lg font-black text-purple-700 leading-tight">{WIN_SCORE}</div>
+            <div className="bg-white/80 rounded-xl p-3 shadow-md flex-1 text-center">
+              <div className="text-xs text-purple-600 font-black mb-1 uppercase tracking-wide">TARGET</div>
+              <div className="text-3xl font-black text-purple-600">{WIN_SCORE}</div>
             </div>
-            <div className="bg-red-50 rounded-lg px-2 py-1 shadow-sm flex-1 text-right">
-              <div className="text-[7px] text-red-800 font-bold uppercase">⏱️ Time</div>
-              <div className={`text-lg font-black leading-tight ${timeLeft <= 5 ? 'text-red-600 animate-pulse' : 'text-red-700'}`}>
+            <div className="bg-white/80 rounded-xl p-3 shadow-md flex-1 text-right">
+              <div className="text-xs text-purple-600 font-black mb-1 uppercase tracking-wide">TIME</div>
+              <div className={`text-3xl font-black ${timeLeft <= 5 ? 'text-red-600 animate-pulse' : 'text-orange-600'}`}>
                 {timeLeft}s
               </div>
             </div>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden border border-purple-300">
+          <div className="h-3 bg-white/60 rounded-full overflow-hidden border-2 border-purple-300 shadow-inner">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300"
-              style={{ width: `${Math.min((score / WIN_SCORE) * 100, 100)}%` }}
+              className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300 rounded-full shadow-lg"
+              style={{ width: `${(score / WIN_SCORE) * 100}%` }}
             />
           </div>
         </div>
@@ -313,18 +289,20 @@ const GameSandbox: FC = () => {
             <button
               key={bubble.id}
               onClick={() => handleBubbleClick(bubble.id, bubble.x, bubble.y, bubble.colorFrom, bubble.colorTo, bubble.points)}
-              className="absolute rounded-full cursor-pointer touch-manipulation active:scale-75 transition-transform duration-100 bubble"
+              className="absolute rounded-full cursor-pointer touch-manipulation active:scale-75 transition-transform duration-100 hover:scale-110"
               style={{
                 left: `${bubble.x}%`,
                 top: `${bubble.y}%`,
                 width: `${bubble.size}px`,
                 height: `${bubble.size}px`,
                 background: `linear-gradient(135deg, ${bubble.colorFrom}, ${bubble.colorTo})`,
+                transform: 'translate(-50%, -50%)',
+                animation: 'float 3s ease-in-out infinite',
                 WebkitTapHighlightColor: 'transparent',
-                boxShadow: `0 10px 25px rgba(0,0,0,0.3), inset -2px -2px 6px rgba(0,0,0,0.15)`,
+                boxShadow: `0 8px 20px rgba(0,0,0,0.25), inset -2px -2px 5px rgba(0,0,0,0.2)`,
               }}
             >
-              <div className="w-full h-full rounded-full flex items-center justify-center text-white font-black text-sm drop-shadow-lg" style={{textShadow: '0 2px 4px rgba(0,0,0,0.5)'}}>
+              <div className="w-full h-full rounded-full opacity-95 flex items-center justify-center text-white font-black text-sm drop-shadow-lg" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.3)'}}>
                 +{bubble.points}
               </div>
             </button>
@@ -332,26 +310,20 @@ const GameSandbox: FC = () => {
       </div>
 
       {gameWon && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-between bg-gradient-to-b from-yellow-200/95 via-pink-200/95 to-purple-200/95 p-4">
-          <div className="text-5xl mb-2">🎉</div>
-          
-          <h1 className="text-3xl font-black text-white text-center leading-tight mb-2" style={{textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-gradient-to-b from-yellow-200/97 via-pink-200/97 to-purple-200/97 p-8 backdrop-blur-sm">
+          <div className="text-9xl mb-6 animate-bounce drop-shadow-xl">🎉</div>
+          <h1 className="text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-pink-600 to-purple-600 drop-shadow-lg text-center">
             YOU WIN!
           </h1>
-
-          <div className="bg-white/80 backdrop-blur px-3 py-1 rounded-xl shadow-md mb-2 border border-white/60">
-            <p className="text-xs font-black text-purple-700">{difficulty?.toUpperCase()} MODE</p>
+          <div className="text-2xl font-black text-gray-800 mb-3 bg-white/80 px-6 py-2 rounded-xl shadow-lg">
+            {difficulty?.toUpperCase()} MODE
           </div>
-
-          <div className="bg-white/80 backdrop-blur px-4 py-2 rounded-xl shadow-md mb-4 border border-white/60">
-            <p className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-pink-600">
-              {score} PTS
-            </p>
+          <div className="text-2xl font-black text-gray-800 mb-8 bg-white/80 px-6 py-3 rounded-xl shadow-lg">
+            Final Score: <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-pink-600">{score}</span>
           </div>
-
           <button
             onClick={handleRestart}
-            className="px-6 py-2.5 bg-gradient-to-br from-yellow-400 via-orange-400 to-red-500 text-white font-bold rounded-2xl text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all border-3 border-white/50"
+            className="px-10 py-5 bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-500 text-white font-black rounded-2xl text-2xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all border-3 border-white hover:scale-105 transform"
           >
             🎮 PLAY AGAIN 🎮
           </button>
@@ -359,26 +331,20 @@ const GameSandbox: FC = () => {
       )}
 
       {gameOver && !gameWon && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-between bg-gradient-to-b from-gray-300/95 via-slate-300/95 to-gray-400/95 p-4">
-          <div className="text-5xl mb-2">😢</div>
-          
-          <h1 className="text-3xl font-black text-white text-center leading-tight mb-2" style={{textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-gradient-to-b from-gray-300/97 via-slate-300/97 to-gray-400/97 p-8 backdrop-blur-sm">
+          <div className="text-9xl mb-6 drop-shadow-xl">😢</div>
+          <h1 className="text-6xl font-black mb-3 text-transparent bg-clip-text bg-gradient-to-r from-gray-700 to-slate-800 drop-shadow-lg text-center">
             GAME OVER
           </h1>
-
-          <div className="bg-white/80 backdrop-blur px-3 py-1 rounded-xl shadow-md mb-2 border border-white/60">
-            <p className="text-xs font-black text-gray-700">{difficulty?.toUpperCase()} LEVEL</p>
+          <div className="text-2xl font-black text-gray-800 mb-3 bg-white/80 px-6 py-2 rounded-xl shadow-lg">
+            {difficulty?.toUpperCase()} MODE
           </div>
-
-          <div className="bg-white/80 backdrop-blur px-4 py-2 rounded-xl shadow-md mb-4 border border-white/60">
-            <p className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-              {score} PTS
-            </p>
+          <div className="text-2xl font-black text-gray-800 mb-8 bg-white/80 px-6 py-3 rounded-xl shadow-lg">
+            Score: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">{score}</span>
           </div>
-
           <button
             onClick={handleRestart}
-            className="px-6 py-2.5 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white font-bold rounded-2xl text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all border-3 border-white/50"
+            className="px-10 py-5 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white font-black rounded-2xl text-2xl shadow-2xl hover:shadow-3xl active:scale-95 transition-all border-3 border-white hover:scale-105 transform"
           >
             🔄 RESTART 🔄
           </button>
