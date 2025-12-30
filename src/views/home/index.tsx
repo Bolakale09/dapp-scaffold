@@ -69,13 +69,18 @@ const GameSandbox: FC = () => {
   };
 
   const colors = [
-    { name: 'red', from: '#f87171', to: '#dc2626', points: 10 },
-    { name: 'orange', from: '#fb923c', to: '#ea580c', points: 15 },
-    { name: 'yellow', from: '#facc15', to: '#ca8a04', points: 20 },
-    { name: 'green', from: '#4ade80', to: '#16a34a', points: 25 },
-    { name: 'blue', from: '#60a5fa', to: '#2563eb', points: 30 },
-    { name: 'purple', from: '#a78bfa', to: '#7c3aed', points: 35 },
-    { name: 'pink', from: '#f472b6', to: '#db2777', points: 40 },
+    { name: 'red', from: '#ef4444', to: '#dc2626', points: 10 },
+    { name: 'orange', from: '#f97316', to: '#ea580c', points: 15 },
+    { name: 'yellow', from: '#eab308', to: '#ca8a04', points: 20 },
+    { name: 'lime', from: '#84cc16', to: '#65a30d', points: 22 },
+    { name: 'green', from: '#22c55e', to: '#16a34a', points: 25 },
+    { name: 'cyan', from: '#06b6d4', to: '#0891b2', points: 28 },
+    { name: 'blue', from: '#3b82f6', to: '#2563eb', points: 30 },
+    { name: 'indigo', from: '#6366f1', to: '#4f46e5', points: 32 },
+    { name: 'purple', from: '#a855f7', to: '#9333ea', points: 35 },
+    { name: 'fuchsia', from: '#d946ef', to: '#c026d3', points: 37 },
+    { name: 'pink', from: '#ec4899', to: '#db2777', points: 40 },
+    { name: 'rose', from: '#f43f5e', to: '#e11d48', points: 12 },
   ];
 
   useEffect(() => {
@@ -187,16 +192,15 @@ const GameSandbox: FC = () => {
     <div className="h-full w-full flex flex-col overflow-hidden bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300 relative">
       <style>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-10px) rotate(5deg); }
+          0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(0deg); }
+          50% { transform: translate(-50%, -50%) translateY(-10px) rotate(5deg); }
         }
         @keyframes sparkle {
           0% { opacity: 0.2; transform: scale(0.5); }
           100% { opacity: 0; transform: scale(1.2) translateY(20px); }
         }
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
+        .bubble {
+          animation: float 3.5s ease-in-out infinite;
         }
       `}</style>
 
@@ -215,58 +219,63 @@ const GameSandbox: FC = () => {
       ))}
 
       {!gameStarted && !difficulty && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-start pt-4 bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300 px-4">
-          {/* Bubble Icon */}
-          <div className="text-5xl mb-1">🫧</div>
-          
-          {/* Title */}
-          <h1 className="text-3xl font-black text-white text-center leading-tight mb-2" style={{textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>
-            BUBBLE POP
-          </h1>
-          
-          {/* Divider */}
-          <div className="h-0.5 w-16 bg-white/60 rounded-full mb-2"></div>
-          
-          {/* Description */}
-          <p className="text-xs text-white/95 text-center font-semibold mb-3">
-            Pop bubbles to reach your target score!
-          </p>
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-between bg-gradient-to-b from-indigo-300 via-purple-300 to-pink-300 px-4 py-4">
+          {/* Top Section - Title & Bubbles */}
+          <div className="flex flex-col items-center gap-2">
+            {/* Bubble Icon */}
+            <div className="text-5xl">🫧</div>
+            
+            {/* Title */}
+            <h1 className="text-3xl font-black text-white text-center leading-tight" style={{textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>
+              BUBBLE POP
+            </h1>
+            
+            {/* Divider */}
+            <div className="h-0.5 w-16 bg-white/60 rounded-full"></div>
+            
+            {/* Description */}
+            <p className="text-xs text-white/95 text-center font-semibold">
+              Pop bubbles to reach your target score!
+            </p>
 
-          {/* Buttons Container */}
-          <div className="flex flex-col gap-2 w-full max-w-xs flex-1 justify-center">
+            {/* Select Play Statement */}
+            <p className="text-sm font-black text-white/90 mt-1">
+              SELECT PLAY
+            </p>
+          </div>
+
+          {/* Middle Section - Buttons in Row */}
+          <div className="flex gap-2 justify-center w-full px-2">
             <button
               onClick={() => handleDifficultySelect('easy')}
-              className="w-full px-3 py-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-bold rounded-2xl text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all border-3 border-white/30"
+              className="flex-1 px-2 py-2 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
             >
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-lg">🟢</span>
-                <span>EASY</span>
-              </div>
-              <div className="text-[10px] text-white/80">45s • 300 pts</div>
+              <div className="text-lg">🟢</div>
+              <div className="font-black text-xs">EASY</div>
+              <div className="text-[8px] text-white/80">45s</div>
             </button>
 
             <button
               onClick={() => handleDifficultySelect('medium')}
-              className="w-full px-3 py-2.5 bg-gradient-to-br from-amber-400 to-orange-600 text-white font-bold rounded-2xl text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all border-3 border-white/30"
+              className="flex-1 px-2 py-2 bg-gradient-to-br from-amber-400 to-orange-600 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
             >
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-lg">🟡</span>
-                <span>MEDIUM</span>
-              </div>
-              <div className="text-[10px] text-white/80">35s • 500 pts</div>
+              <div className="text-lg">🟡</div>
+              <div className="font-black text-xs">MEDIUM</div>
+              <div className="text-[8px] text-white/80">35s</div>
             </button>
 
             <button
               onClick={() => handleDifficultySelect('hard')}
-              className="w-full px-3 py-2.5 bg-gradient-to-br from-red-500 to-red-700 text-white font-bold rounded-2xl text-sm shadow-lg hover:shadow-xl active:scale-95 transition-all border-3 border-white/30"
+              className="flex-1 px-2 py-2 bg-gradient-to-br from-red-500 to-red-700 text-white font-bold rounded-xl text-xs shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all border-2 border-white/30"
             >
-              <div className="flex items-center justify-center gap-1">
-                <span className="text-lg">🔴</span>
-                <span>HARD</span>
-              </div>
-              <div className="text-[10px] text-white/80">30s • 800 pts</div>
+              <div className="text-lg">🔴</div>
+              <div className="font-black text-xs">HARD</div>
+              <div className="text-[8px] text-white/80">30s</div>
             </button>
           </div>
+
+          {/* Bottom spacer */}
+          <div></div>
         </div>
       )}
 
@@ -304,17 +313,15 @@ const GameSandbox: FC = () => {
             <button
               key={bubble.id}
               onClick={() => handleBubbleClick(bubble.id, bubble.x, bubble.y, bubble.colorFrom, bubble.colorTo, bubble.points)}
-              className="absolute rounded-full cursor-pointer touch-manipulation active:scale-75 transition-transform duration-100"
+              className="absolute rounded-full cursor-pointer touch-manipulation active:scale-75 transition-transform duration-100 bubble"
               style={{
                 left: `${bubble.x}%`,
                 top: `${bubble.y}%`,
                 width: `${bubble.size}px`,
                 height: `${bubble.size}px`,
-                background: `radial-gradient(135deg at 30% 30%, ${bubble.colorFrom}, ${bubble.colorTo})`,
-                transform: 'translate(-50%, -50%)',
-                animation: 'float 3.5s ease-in-out infinite',
+                background: `linear-gradient(135deg, ${bubble.colorFrom}, ${bubble.colorTo})`,
                 WebkitTapHighlightColor: 'transparent',
-                boxShadow: `0 10px 25px rgba(0,0,0,0.3), inset -2px -2px 6px rgba(0,0,0,0.15), inset 2px 2px 6px rgba(255,255,255,0.3)`,
+                boxShadow: `0 10px 25px rgba(0,0,0,0.3), inset -2px -2px 6px rgba(0,0,0,0.15)`,
               }}
             >
               <div className="w-full h-full rounded-full flex items-center justify-center text-white font-black text-sm drop-shadow-lg" style={{textShadow: '0 2px 4px rgba(0,0,0,0.5)'}}>
