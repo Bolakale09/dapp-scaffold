@@ -5,20 +5,49 @@ import pkg from '../../../package.json';
 // ❌ DO NOT EDIT ANYTHING ABOVE THIS LINE
 
 export const HomeView: FC = () => {
+  // Handle browser extension conflicts (e.g., MetaMask ethereum property redefinition)
+  useEffect(() => {
+    // Suppress specific errors from browser extensions
+    const errorHandler = (event: ErrorEvent) => {
+      if (
+        event.error instanceof TypeError &&
+        event.error.message?.includes('Cannot redefine property: ethereum')
+      ) {
+        // Silently suppress ethereum redefinition errors from browser extensions
+        event.preventDefault();
+        return false;
+      }
+    };
+
+    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
+      if (
+        event.reason instanceof TypeError &&
+        event.reason.message?.includes('Cannot redefine property: ethereum')
+      ) {
+        // Silently suppress ethereum redefinition promise rejections
+        event.preventDefault();
+        return false;
+      }
+    };
+
+    window.addEventListener('error', errorHandler);
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
+    return () => {
+      window.removeEventListener('error', errorHandler);
+      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen w-screen flex-col bg-black text-white overflow-hidden">
-      {/* HEADER – fake Scrolly feed tabs */}
-      <header className="flex items-center justify-center border-b border-white/10 py-2 sm:py-3 flex-shrink-0">
-        <div className="flex items-center gap-2 rounded-full bg-white/5 px-2 py-1 text-[10px] sm:text-[11px]">
-          <button className="rounded-full bg-slate-900 px-3 py-1 font-semibold text-white">
-            Feed
-          </button>
-          <button className="rounded-full px-3 py-1 text-slate-400">
-            Casino
-          </button>
-          <button className="rounded-full px-3 py-1 text-slate-400">
-            Kids
-          </button>
+      {/* HEADER – Scrolly game header */}
+      <header className="flex items-center justify-between border-b border-white/10 px-4 py-2 sm:py-3 flex-shrink-0 bg-slate-900">
+        <div className="text-slate-300 uppercase text-[10px] sm:text-[11px] font-medium">
+          SCROLLY GAME
+        </div>
+        <div className="text-slate-300 uppercase text-[10px] sm:text-[11px] font-medium">
+          #NoCode.Iam
         </div>
       </header>
 
@@ -36,7 +65,7 @@ export const HomeView: FC = () => {
           {/* The game lives INSIDE this phone frame */}
           <div className="flex h-[calc(100%-32px)] sm:h-[calc(100%-26px)] flex-col items-center justify-start px-2 sm:px-3 pb-2 sm:pb-3 pt-0.5 sm:pt-1 overflow-hidden">
           <GameSandbox />
-          </div>
+        </div>
         </div>
       </main>
 
@@ -135,9 +164,9 @@ const GameSandbox: FC = () => {
     speedRamp: number;
     missPenalty: number;
   }> = {
-    easy: { duration: 45, spawnRate: 1200, target: 300, label: 'EASY', fallSpeed: 0.4, speedRamp: 0.003, missPenalty: 0.03 },
-    medium: { duration: 35, spawnRate: 800, target: 500, label: 'MEDIUM', fallSpeed: 1.4, speedRamp: 0.008, missPenalty: 0.08 },
-    hard: { duration: 30, spawnRate: 500, target: 800, label: 'HARD', fallSpeed: 1.9, speedRamp: 0.012, missPenalty: 0.12 },
+    easy: { duration: 45, spawnRate: 1200, target: 500, label: 'EASY', fallSpeed: 0.25, speedRamp: 0.003, missPenalty: 0.03 },
+    medium: { duration: 35, spawnRate: 800, target: 800, label: 'MEDIUM', fallSpeed: 0.6, speedRamp: 0.008, missPenalty: 0.08 },
+    hard: { duration: 30, spawnRate: 500, target: 1200, label: 'HARD', fallSpeed: 0.9, speedRamp: 0.012, missPenalty: 0.12 },
   };
 
   const colors = [
@@ -291,7 +320,7 @@ const GameSandbox: FC = () => {
 
     const baseSpawnRate = difficultySettings[difficulty].spawnRate;
     const totalDuration = difficultySettings[difficulty].duration;
-    let intervalId: NodeJS.Timeout;
+    let intervalId: NodeJS.Timeout | undefined;
 
     const spawnBubble = () => {
       // Recalculate spawn rate dynamically from elapsed time (smooth curve)
@@ -370,9 +399,8 @@ const GameSandbox: FC = () => {
       intervalId = setTimeout(spawnBubble, nextRate);
     };
 
-    // Start spawning
-    const initialRate = currentSpawnRate > 0 ? currentSpawnRate : baseSpawnRate;
-    intervalId = setTimeout(spawnBubble, initialRate);
+    // Start spawning immediately (no delay)
+    spawnBubble(); // Spawn first bubble immediately
 
     return () => {
       if (intervalId) clearTimeout(intervalId);
@@ -445,7 +473,7 @@ const GameSandbox: FC = () => {
           // Small smooth speed increase on missed bubbles (minimal penalty to avoid chaos spikes)
           if (difficulty) {
             const missPenalty = difficultySettings[difficulty].missPenalty * 0.3; // Reduced by 70% for smoothness
-            const maxSpeed = difficulty === 'easy' ? 1.2 : difficulty === 'medium' ? 2.5 : 3.5;
+            const maxSpeed = difficulty === 'easy' ? 0.75 : difficulty === 'medium' ? 1.0 : 1.6;
             setFallSpeed((prevSpeed) => Math.min(prevSpeed + missPenalty, maxSpeed));
           }
         }
@@ -509,7 +537,7 @@ const GameSandbox: FC = () => {
     const timerInterval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          setGameOver(true);
+              setGameOver(true);
           return 0;
         }
         return prev - 1;
@@ -550,7 +578,7 @@ const GameSandbox: FC = () => {
         setCurrentSpawnRate(newSpawnRate);
         
         // Phase 2: Increase speed (smooth curve, starts after spawn rate phase)
-        const maxSpeed = difficulty === 'easy' ? 1.2 : difficulty === 'medium' ? 2.5 : 3.5;
+        const maxSpeed = difficulty === 'easy' ? 0.75 : difficulty === 'medium' ? 1.0 : 1.6;
         const newSpeed = calculateSpeed(newTime, totalDuration, settings.fallSpeed, maxSpeed);
         setFallSpeed(newSpeed);
         
@@ -840,7 +868,7 @@ const GameSandbox: FC = () => {
     const comboResult = applyComboLogic(timeSinceLastPop, combo, bubbleType, chainCount);
     const newCombo = comboResult.newCombo;
     
-    setCombo(newCombo);
+      setCombo(newCombo);
     
     // Play combo sound with increasing pitch
     if (newCombo > combo && newCombo > 1) {
@@ -986,7 +1014,7 @@ const GameSandbox: FC = () => {
           <div
             key={p.id}
           className="absolute w-2.5 h-2.5 rounded-full pointer-events-none"
-          style={{
+            style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             background: p.color,
@@ -1004,10 +1032,10 @@ const GameSandbox: FC = () => {
             style={{
             animation: `achievementPop 2s ease-out ${idx * 0.2}s forwards`,
               transform: 'translateX(-50%)',
-          }}
-        >
+            }}
+          >
           {getAchievementText(achievement)}
-        </div>
+          </div>
       ))}
 
       {/* Celebration Confetti - Limited animation */}
@@ -1025,8 +1053,8 @@ const GameSandbox: FC = () => {
                 animationDelay: `${i * 0.1}s`,
               }}
             />
-          ))}
-        </div>
+        ))}
+      </div>
       )}
 
       {/* Tutorial Overlay - Shows before game starts */}
@@ -1061,8 +1089,8 @@ const GameSandbox: FC = () => {
             >
               Got it! 🎮
             </button>
-          </div>
-        </div>
+              </div>
+            </div>
       )}
 
       {!gameStarted && !difficulty && (
@@ -1097,8 +1125,8 @@ const GameSandbox: FC = () => {
             >
               🔴 HARD
             </button>
-          </div>
-      </div>
+              </div>
+            </div>
       )}
 
       {gameStarted && difficulty && !gameOver && !gameWon && (
@@ -1134,7 +1162,7 @@ const GameSandbox: FC = () => {
               <div className="bg-gray-50/80 rounded px-2 py-1 border border-gray-200/40 sm:hidden">
                 <div className="text-[7px] text-gray-600 font-semibold uppercase">
                   {powerUpActive.type === 'slow' ? '⏱️' : '⚡'}
-                </div>
+          </div>
                 <div className="text-[9px] text-gray-700 font-semibold">
                   {Math.ceil((powerUpActive.expires - Date.now()) / 1000)}s
                 </div>
@@ -1233,18 +1261,18 @@ const GameSandbox: FC = () => {
           <div className="text-6xl sm:text-8xl mb-4 sm:mb-6" style={commonStyles.dropShadowYellow}>🎉</div>
           <h1 className="text-4xl sm:text-5xl font-black mb-3 sm:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-pink-600 to-purple-600 text-center px-2">
             YOU WIN!
-          </h1>
+            </h1>
           <div className="text-base sm:text-lg font-bold text-gray-700 mb-2 bg-white/90 px-4 sm:px-5 py-2 rounded-lg sm:rounded-xl shadow-md border border-yellow-200/50">
             {difficulty?.toUpperCase()} MODE
               </div>
           <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 w-full max-w-xs sm:max-w-sm">
             <div className="text-base sm:text-lg font-black text-gray-800 bg-white/90 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-md border border-pink-200/50">
               Score: <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-pink-600">{score}</span>
-            </div>
+              </div>
             <div className="text-base sm:text-lg font-black text-gray-800 bg-white/90 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-md border border-orange-200/50">
               Max Combo: <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-yellow-600">{maxCombo}</span>
-            </div>
-          </div>
+              </div>
+              </div>
           {timeBonus > 0 && (
             <div className="text-base sm:text-lg font-black text-gray-800 mb-3 bg-gradient-to-r from-green-100 to-emerald-100 px-4 sm:px-5 py-2 rounded-lg sm:rounded-xl shadow-md border border-green-300/50">
               ⏱️ Time Bonus: <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600">+{timeBonus}</span>
@@ -1279,26 +1307,26 @@ const GameSandbox: FC = () => {
           <div className="text-6xl sm:text-8xl mb-4 sm:mb-6" style={commonStyles.dropShadow}>😢</div>
           <h1 className="text-4xl sm:text-5xl font-black mb-3 sm:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-gray-700 to-slate-800 text-center px-2">
             GAME OVER
-          </h1>
+              </h1>
           <div className="text-base sm:text-lg font-bold text-gray-700 mb-2 bg-white/90 px-4 sm:px-5 py-2 rounded-lg sm:rounded-xl shadow-md border border-slate-200/50">
             {difficulty?.toUpperCase()} MODE
-          </div>
+                  </div>
           <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6 w-full max-w-xs sm:max-w-sm">
             <div className="text-lg sm:text-xl font-black text-gray-800 bg-white/90 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl shadow-md border border-blue-200/50">
               Score: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">{score}</span>
-            </div>
+              </div>
             <div className="text-lg sm:text-xl font-black text-gray-800 bg-white/90 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl shadow-md border border-orange-200/50">
               Max Combo: <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-yellow-600">{maxCombo}</span>
-            </div>
-          </div>
+                </div>
+              </div>
               <button
             onClick={handleRestart}
             className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white font-black rounded-xl sm:rounded-2xl text-base sm:text-lg shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 border-2 border-white/60 hover:scale-[1.02] touch-manipulation"
-          >
+              >
             🔄 RESTART 🔄
               </button>
-        </div>
-      )}
+          </div>
+        )}
     </div>
   );
 };
